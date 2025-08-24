@@ -24,16 +24,16 @@ A cloud-powered MERN stack web application designed to help NGOs manage and redi
 ### 🔐 Login Screen
 ![Login Screen](images/Login.png)
 
-### 💬 Home Page
+### 🏠 Home Page
 ![HomePage](images/HomePage.png)
 
-### 💬 Donor Dashboard
+### 🧑 Donor Dashboard
 ![Donor Dashboard](images/DonorDB.png)
 
-### 💬 Admin Dashboard
+### 🧑‍💻 Admin Dashboard
 ![Admin Dashboard](images/AdminDB.png)
 
-### 💬 Food Posts
+### 🥗 Food Posts
 ![Food Post](images/Foodpost.png)
 
 ---
