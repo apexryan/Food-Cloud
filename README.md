@@ -44,7 +44,7 @@ A cloud-powered MERN stack web application designed to help NGOs manage and redi
 - React.js (Vite)
 - HTML5, CSS3, Bootstrap 5
 - Axios
-- 
+
 ### ⚙️ Backend
 - Node.js + Express.js
 - JWT Authentication
