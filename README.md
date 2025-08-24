@@ -21,22 +21,20 @@ A cloud-powered MERN stack web application designed to help NGOs manage and redi
 
 ## 📸 Screenshots
 
+### 🔐 Login Screen
 ![Login Screen](images/Login.png)
 
-### 🔐 Login Screen
-![Login Screen](<img width="937" height="842" alt="Screenshot 2025-08-24 224626" src="https://github.com/user-attachments/assets/214f7896-4053-4526-9ef0-a773befa4f36" />)
-
 ### 💬 Home Page
-![NGO Dashboard](<img width="1818" height="830" alt="Screenshot 2025-08-24 224116" src="https://github.com/user-attachments/assets/31e84551-914b-4413-bf39-28d28f32274c" />)
+![HomePage](images/HomePage.png)
 
 ### 💬 Donor Dashboard
-![NGO Dashboard](<img width="1253" height="692" alt="Screenshot 2025-08-24 224640" src="https://github.com/user-attachments/assets/f2ede69d-f247-481e-ac59-0eb73917a315" />)
+![Donor Dashboard](images/DonorDB.png)
 
 ### 💬 Admin Dashboard
-![NGO Dashboard](<img width="1440" height="868" alt="Screenshot 2025-08-24 224349" src="https://github.com/user-attachments/assets/938daafe-0415-44eb-8628-ce3125f5bdfa" />)
+![Admin Dashboard](images/AdminDB.png)
 
 ### 💬 Food Posts
-![NGO Dashboard](<img width="1861" height="907" alt="Screenshot 2025-08-24 230712" src="https://github.com/user-attachments/assets/e1f9f820-9d20-4520-9dc3-f52992fd4664" />)
+![Food Post](images/Foodpost.png)
 
 ---
 
