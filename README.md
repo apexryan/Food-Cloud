@@ -21,6 +21,8 @@ A cloud-powered MERN stack web application designed to help NGOs manage and redi
 
 ## 📸 Screenshots
 
+![Login Screen](GithubImages/Login.png)
+
 ### 🔐 Login Screen
 ![Login Screen](<img width="937" height="842" alt="Screenshot 2025-08-24 224626" src="https://github.com/user-attachments/assets/214f7896-4053-4526-9ef0-a773befa4f36" />)
 
