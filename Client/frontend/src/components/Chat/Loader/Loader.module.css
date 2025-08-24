@@ -1,0 +1,19 @@
+.loaderContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #f5f5f5;
+  border-radius: 18px;
+  align-self: flex-start;
+  max-width: 80%;
+}
+
+.spinner {
+  color: #1976d2;
+}
+
+.loadingText {
+  color: #666;
+  font-style: italic;
+}
