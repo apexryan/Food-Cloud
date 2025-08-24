@@ -95,7 +95,7 @@ server/                  # Node.js Backend
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/apexryan/Food-Cloud.git
+git clone https://github.com/username/Food-Cloud.git
 
 # 2. Navigate into the project folder
 cd foodcloud
