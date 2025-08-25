@@ -30,8 +30,9 @@ import {
   Logout,
   AccountCircle,
 } from "@mui/icons-material";
-import RazorpayDonation from "./RazorpayDonation";
+// Removed RazorpayDonation
 import ChatDialog from "./Chat/ChatDialog";
+import apiService from "../services/apiService";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ const Navigation = () => {
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isRzpReady, setIsRzpReady] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -59,6 +61,82 @@ const Navigation = () => {
     logout();
     handleProfileMenuClose();
     navigate("/login");
+  };
+
+  // Load Razorpay script once
+  React.useEffect(() => {
+    const existingScript = document.querySelector(
+      'script[src="https://checkout.razorpay.com/v1/checkout.js"]'
+    );
+    if (existingScript) {
+      setIsRzpReady(true);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => setIsRzpReady(true);
+    script.onerror = () => setIsRzpReady(false);
+    document.body.appendChild(script);
+  }, []);
+
+  const openRazorpayCheckout = async (amountInRupees = 199) => {
+    try {
+      const amountInPaise = Math.max(1, Math.floor(amountInRupees * 100));
+      if (!isRzpReady || typeof window.Razorpay === "undefined") {
+        alert("Payment service not ready. Please wait a moment and try again.");
+        return;
+      }
+
+      // Get public key from server and create order using secret on backend
+      const cfg = await apiService.getRazorpayConfig();
+      const keyId = cfg?.config?.key;
+      if (!keyId) {
+        alert("Payment configuration missing on server.");
+        return;
+      }
+
+      const orderRes = await apiService.createRazorpayOrder(
+        amountInPaise,
+        "INR"
+      );
+      if (!orderRes?.success) {
+        alert("Failed to create payment order. Try again.");
+        return;
+      }
+
+      const options = {
+        key: keyId,
+        amount: amountInPaise,
+        currency: "INR",
+        name: "FoodCloud Connect",
+        description: "Support our platform",
+        image: "/vite.svg",
+        order_id: orderRes.order?.id,
+        handler: function (response) {
+          alert(
+            `Payment successful! Payment ID: ${response.razorpay_payment_id}`
+          );
+          navigate("/dashboard");
+        },
+        prefill: {
+          name: user?.name || "Subhojit Santra",
+          email: user?.email || "raj@example.com",
+        },
+        notes: {
+          purpose: "Donation/Support",
+        },
+        theme: {
+          color: "#1976d2",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (e) {
+      console.error(e);
+      alert("Payment initialization failed. Check server keys and try again.");
+    }
   };
 
   const getRoleIcon = (role) => {
@@ -117,9 +195,6 @@ const Navigation = () => {
         <ListItem>
           <ChatDialog />
         </ListItem>
-        <ListItem>
-          <RazorpayDonation />
-        </ListItem>
       </List>
     </Box>
   );
@@ -171,7 +246,14 @@ const Navigation = () => {
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <ChatDialog />
-            <RazorpayDonation />
+            <Button
+              color="inherit"
+              onClick={() => openRazorpayCheckout(199)}
+              disabled={!isRzpReady}
+              sx={{ mr: 1, display: { xs: "none", sm: "inline-flex" } }}
+            >
+              Donate
+            </Button>
             {isAuthenticated ? (
               <>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>

@@ -23,6 +23,8 @@ const foodRoutes = require("./routes/foodroutes"); // ✅ YOUR Person 2 routes
 const adminRoutes = require("./routes/adminRoutes");
 const ngoRoutes = require("./routes/ngoRoutes");
 const volunteerRoutes = require("./routes/volunteerRoutes");
+// Removed Razorpay routes
+const chatRoutes = require("./routes/chatRoutes");
 const razorpayRoutes = require("./routes/razorpayRoutes");
 
 // Route middleware
@@ -33,6 +35,8 @@ app.use("/api/food", foodRoutes); // ✅ YOUR food system handles everything
 app.use("/api/admins", adminRoutes);
 app.use("/api/ngos", ngoRoutes);
 app.use("/api/volunteers", volunteerRoutes);
+// Removed Razorpay route mount
+app.use("/api/chat", chatRoutes);
 app.use("/api/razorpay", razorpayRoutes);
 
 // ❌ REMOVED: Duplicate food route - your foodRoutes already handles admin access

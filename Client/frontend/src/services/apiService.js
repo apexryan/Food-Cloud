@@ -256,26 +256,6 @@ class ApiService {
     }
   }
 
-  // PUT /api/food/:id/unavailable - Admin mark as unavailable
-  async markFoodAsUnavailable(foodId) {
-    try {
-      const response = await api.put(`/food/${foodId}/unavailable`);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || error.message;
-    }
-  }
-
-  // PUT /api/food/:id/available - Admin mark as available
-  async markFoodAsAvailable(foodId) {
-    try {
-      const response = await api.put(`/food/${foodId}/available`);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || error.message;
-    }
-  }
-
   // ==================== UTILITY METHODS ====================
 
   logout() {
@@ -292,10 +272,32 @@ class ApiService {
     return !!localStorage.getItem("token");
   }
 
-  // Get Razorpay configuration
+  // Removed Razorpay methods
   async getRazorpayConfig() {
     try {
       const response = await api.get("/razorpay/config");
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  }
+
+  async createRazorpayOrder(amountInPaise, currency = "INR") {
+    try {
+      const response = await api.post("/razorpay/create-order", {
+        amount: amountInPaise,
+        currency,
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  }
+
+  // ==================== CHATBOT ====================
+  async sendChatMessage(prompt, sessionId) {
+    try {
+      const response = await api.post("/chat/message", { prompt, sessionId });
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;

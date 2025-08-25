@@ -21,6 +21,7 @@ import FoodPosts from "./components/food/FoodPosts";
 import CreateFoodPost from "./components/food/CreateFoodPost";
 import FoodPostDetail from "./components/food/FoodPostDetail";
 import Profile from "./components/Profile";
+import Footer from "./components/Footer";
 
 // Create theme
 const theme = createTheme({
@@ -105,6 +106,7 @@ function App() {
               {/* Catch all route */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
+            <Footer />
           </div>
         </Router>
       </AuthProvider>

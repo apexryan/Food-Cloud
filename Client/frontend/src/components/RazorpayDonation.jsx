@@ -53,15 +53,30 @@ const RazorpayDonation = () => {
         return;
       }
 
-      // Initialize Razorpay
+      const amountInPaise = Number(amount) * 100;
+
+      // 1) Create order on server
+      const orderRes = await apiService.createRazorpayOrder(
+        amountInPaise,
+        "INR"
+      );
+      if (!orderRes?.success) {
+        setError("Failed to create payment order. Please try again.");
+        return;
+      }
+
+      const order = orderRes.order;
+
+      // 2) Initialize Razorpay with key and order id
       const options = {
-        key: razorpayKey, // Use key fetched from server
-        amount: amount * 100, // Razorpay expects amount in paise
+        key: razorpayKey,
+        amount: amountInPaise,
         currency: "INR",
         name: "FoodCloud Connect",
-        description: "Donation for FoodCloud Connect",
+        description: "Donation for NGOs",
         image:
           "https://via.placeholder.com/150x50/1976d2/ffffff?text=FoodCloud",
+        order_id: order?.id,
         handler: function (response) {
           console.log("Payment successful:", response);
           alert(
@@ -72,12 +87,12 @@ const RazorpayDonation = () => {
           setAmount("");
         },
         prefill: {
-          name: "Donor",
-          email: "donor@example.com",
-          contact: "9999999999",
+          name: "Subhojit Santra",
+          email: "subhojit.santra@gmail.com",
+          contact: "6289619338",
         },
         notes: {
-          address: "FoodCloud Connect Donation",
+          address: "NGO Donation via FoodCloud",
         },
         theme: {
           color: "#1976d2",

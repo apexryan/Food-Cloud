@@ -109,24 +109,6 @@ const FoodPosts = () => {
     }
   };
 
-  const handleMarkAsUnavailable = async (foodId) => {
-    try {
-      await apiService.markFoodAsUnavailable(foodId);
-      fetchFoodPosts();
-    } catch (error) {
-      setError(error.message || "Failed to mark food post as unavailable");
-    }
-  };
-
-  const handleMarkAsAvailable = async (foodId) => {
-    try {
-      await apiService.markFoodAsAvailable(foodId);
-      fetchFoodPosts();
-    } catch (error) {
-      setError(error.message || "Failed to mark food post as available");
-    }
-  };
-
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -252,30 +234,6 @@ const FoodPosts = () => {
                 </Select>
               </FormControl>
             </Grid>
-
-            {/* Status Filter - Only show for admins */}
-            {user?.role === "admin" && (
-              <Grid item xs={12} md={3}>
-                <FormControl fullWidth>
-                  <InputLabel>Status</InputLabel>
-                  <Select
-                    value={filters.status}
-                    onChange={(e) =>
-                      handleFilterChange("status", e.target.value)
-                    }
-                    label="Status"
-                  >
-                    <MenuItem value="">All Status</MenuItem>
-                    <MenuItem value="available">Available</MenuItem>
-                    <MenuItem value="unavailable">Unavailable</MenuItem>
-                    <MenuItem value="accepted">Accepted</MenuItem>
-                    <MenuItem value="picked_up">Picked Up</MenuItem>
-                    <MenuItem value="delivered">Delivered</MenuItem>
-                    <MenuItem value="canceled">Canceled</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            )}
           </Grid>
         </Paper>
 
@@ -403,32 +361,6 @@ const FoodPosts = () => {
                           </IconButton>
                         </>
                       )}
-
-                    {/* Admin Controls */}
-                    {isAuthenticated && user?.role === "admin" && (
-                      <>
-                        {post.status === "available" && (
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            color="warning"
-                            onClick={() => handleMarkAsUnavailable(post._id)}
-                          >
-                            Mark Unavailable
-                          </Button>
-                        )}
-                        {post.status === "unavailable" && (
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            color="success"
-                            onClick={() => handleMarkAsAvailable(post._id)}
-                          >
-                            Mark Available
-                          </Button>
-                        )}
-                      </>
-                    )}
                   </Box>
                 </CardContent>
               </Card>

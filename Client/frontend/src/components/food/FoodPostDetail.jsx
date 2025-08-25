@@ -73,24 +73,6 @@ const FoodPostDetail = () => {
     }
   };
 
-  const handleMarkAsUnavailable = async () => {
-    try {
-      await apiService.markFoodAsUnavailable(id);
-      fetchFoodPost();
-    } catch (error) {
-      setError(error.message || "Failed to mark food post as unavailable");
-    }
-  };
-
-  const handleMarkAsAvailable = async () => {
-    try {
-      await apiService.markFoodAsAvailable(id);
-      fetchFoodPost();
-    } catch (error) {
-      setError(error.message || "Failed to mark food post as available");
-    }
-  };
-
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -458,32 +440,6 @@ const FoodPostDetail = () => {
                       </Button>
                     </>
                   )}
-
-                {/* Admin Controls */}
-                {isAuthenticated && user?.role === "admin" && (
-                  <>
-                    {foodPost.status === "available" && (
-                      <Button
-                        variant="outlined"
-                        color="warning"
-                        onClick={handleMarkAsUnavailable}
-                        fullWidth
-                      >
-                        Mark as Unavailable
-                      </Button>
-                    )}
-                    {foodPost.status === "unavailable" && (
-                      <Button
-                        variant="outlined"
-                        color="success"
-                        onClick={handleMarkAsAvailable}
-                        fullWidth
-                      >
-                        Mark as Available
-                      </Button>
-                    )}
-                  </>
-                )}
               </Box>
             </Paper>
           </Grid>

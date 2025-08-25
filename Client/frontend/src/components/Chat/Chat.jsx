@@ -1,26 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Controls } from "./Controls/Controls.jsx";
 import styles from "./Chat.module.css";
 import { Loader } from "./Loader/Loader.jsx";
+import apiService from "../../services/apiService";
 
-// Load API key securely
-const API_KEY = "AIzaSyBZaqKBTZTUds0ptmk1R41mjS36PRIDIAU";
-const googleai = new GoogleGenerativeAI(API_KEY);
-const gemini = googleai.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-const Chatboat = () => {
+const Chatbot = () => {
   const [messages, setMessages] = useState([]);
-  const [chat, setChat] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId] = useState(
+    () => `sess_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+  );
 
   // Initialize chat on component mount
   useEffect(() => {
     const initChat = async () => {
       try {
-        const newChat = gemini.startChat({ history: [] });
-        setChat(newChat);
-
         // Add welcome message
         addMessage({
           content:
@@ -48,19 +42,9 @@ const Chatboat = () => {
     setIsLoading(true);
 
     try {
-      if (!chat) {
-        addMessage({
-          content: "Chat service unavailable. Please try again later.",
-          role: "model",
-        });
-        return;
-      }
-
-      const result = await chat.sendMessage(content);
-      const response = await result.response;
-      const text = response.text();
-
-      addMessage({ content: text, role: "model" });
+      const data = await apiService.sendChatMessage(content, sessionId);
+      const reply = data?.reply || "(No response)";
+      addMessage({ content: reply, role: "model" });
     } catch (error) {
       console.error("Error sending message:", error);
       addMessage({
@@ -92,4 +76,4 @@ const Chatboat = () => {
   );
 };
 
-export default Chatboat;
+export default Chatbot;

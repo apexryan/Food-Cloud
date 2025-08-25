@@ -11,8 +11,6 @@ const {
   getFoodById,
   updateFood,
   deleteFood,
-  markAsUnavailable,
-  markAsAvailable,
 } = require("../controllers/foodcontroller");
 
 // Import middleware (the "security guards")
@@ -95,43 +93,7 @@ router.delete(
 );
 console.log("Route registered: DELETE /api/food/:id (Delete food post)");
 
-// ROUTE 6: Admin - Mark food post as unavailable
-// URL: PUT /api/food/:id/unavailable
-// Access: Admin only
-router.put(
-  "/:id/unavailable",
-  authenticateUser, // Must be logged in
-  authorizeRoles("admin"), // Must be admin
-  async (req, res) => {
-    console.log(
-      `PUT /api/food/${req.params.id}/unavailable - Marking as unavailable`
-    );
-    console.log("Action by:", req.user.name, "(Role:", req.user.role, ")");
-    await markAsUnavailable(req, res);
-  }
-);
-console.log(
-  "Route registered: PUT /api/food/:id/unavailable (Admin mark as unavailable)"
-);
-
-// ROUTE 7: Admin - Mark food post as available
-// URL: PUT /api/food/:id/available
-// Access: Admin only
-router.put(
-  "/:id/available",
-  authenticateUser, // Must be logged in
-  authorizeRoles("admin"), // Must be admin
-  async (req, res) => {
-    console.log(
-      `PUT /api/food/${req.params.id}/available - Marking as available`
-    );
-    console.log("Action by:", req.user.name, "(Role:", req.user.role, ")");
-    await markAsAvailable(req, res);
-  }
-);
-console.log(
-  "Route registered: PUT /api/food/:id/available (Admin mark as available)"
-);
+// Removed admin mark available/unavailable routes
 
 // ================== ERROR HANDLING ==================
 
