@@ -145,9 +145,9 @@ Then open http://localhost:5173 in your browser.
 
 ## 🤝 Contributors
 - Rupayan Kumar
-- Subhajit Sadhukan
-- Saptarshi Dutta
+- Subhajit Sadhukhan
 - Rishab Das
+- Saptarshi Dutta
 
 ## 📃 License
 This project is licensed under the MIT License.
