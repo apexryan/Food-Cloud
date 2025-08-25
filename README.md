@@ -21,22 +21,20 @@ A cloud-powered MERN stack web application designed to help NGOs manage and redi
 
 ## 📸 Screenshots
 
-![Login Screen](GithubImages/Login.png)
-
 ### 🔐 Login Screen
-![Login Screen](<img width="937" height="842" alt="Screenshot 2025-08-24 224626" src="https://github.com/user-attachments/assets/214f7896-4053-4526-9ef0-a773befa4f36" />)
+![Login Screen](images/Login.png)
 
-### 💬 Home Page
-![NGO Dashboard](<img width="1818" height="830" alt="Screenshot 2025-08-24 224116" src="https://github.com/user-attachments/assets/31e84551-914b-4413-bf39-28d28f32274c" />)
+### 🏠 Home Page
+![HomePage](images/HomePage.png)
 
-### 💬 Donor Dashboard
-![NGO Dashboard](<img width="1253" height="692" alt="Screenshot 2025-08-24 224640" src="https://github.com/user-attachments/assets/f2ede69d-f247-481e-ac59-0eb73917a315" />)
+### 🧑 Donor Dashboard
+![Donor Dashboard](images/DonorDB.png)
 
-### 💬 Admin Dashboard
-![NGO Dashboard](<img width="1440" height="868" alt="Screenshot 2025-08-24 224349" src="https://github.com/user-attachments/assets/938daafe-0415-44eb-8628-ce3125f5bdfa" />)
+### 🧑‍💻 Admin Dashboard
+![Admin Dashboard](images/AdminDB.png)
 
-### 💬 Food Posts
-![NGO Dashboard](<img width="1861" height="907" alt="Screenshot 2025-08-24 230712" src="https://github.com/user-attachments/assets/e1f9f820-9d20-4520-9dc3-f52992fd4664" />)
+### 🥗 Food Posts
+![Food Post](images/Foodpost.png)
 
 ---
 
@@ -46,7 +44,7 @@ A cloud-powered MERN stack web application designed to help NGOs manage and redi
 - React.js (Vite)
 - HTML5, CSS3, Bootstrap 5
 - Axios
-- 
+
 ### ⚙️ Backend
 - Node.js + Express.js
 - JWT Authentication
@@ -97,7 +95,7 @@ server/                  # Node.js Backend
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/foodcloud.git
+git clone https://github.com/username/Food-Cloud.git
 
 # 2. Navigate into the project folder
 cd foodcloud
