@@ -15,7 +15,6 @@ A cloud-powered MERN stack web application designed to help NGOs manage and redi
   
 **Project Overview Diagram**
 
-<img width="1536" height="1024" alt="20250729_2123_Dark Mode Diagram_remix_01k1be2zvve41s9xg9v65xdkxt" src="https://github.com/user-attachments/assets/44e7edf3-7284-461c-b5e0-3ef0d9f07113" />
 
 ---
 
