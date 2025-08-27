@@ -1,166 +1,132 @@
 const Volunteer = require('../models/volunteerModel');
+const FoodPost = require('../models/foodpost');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// ✅ Volunteer self-registration
+// Register Volunteer
 exports.registerVolunteer = async (req, res) => {
   try {
-    const { name, phone, area, email, password } = req.body;
+    const { name, email, password } = req.body;
 
-    const existing = await Volunteer.findOne({ email });
-    if (existing) {
-      return res.status(400).json({ message: "Email already registered" });
+    const existingVolunteer = await Volunteer.findOne({ email });
+    if (existingVolunteer) {
+      return res.status(400).json({ message: 'Volunteer already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const volunteer = new Volunteer({
       name,
-      phone,
-      area,
       email,
       password: hashedPassword,
-      role: "volunteer"
+      role: 'volunteer'  // Explicitly set role
     });
 
     await volunteer.save();
 
-    res.status(201).json({ message: "Volunteer registered successfully", volunteer });
+    const token = jwt.sign(
+      { id: volunteer._id, role: 'volunteer' },  // Explicitly set role in token
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    res.status(201).json({ 
+      message: 'Volunteer registered successfully',
+      token,
+      volunteer: {
+        id: volunteer._id,
+        name: volunteer.name,
+        email: volunteer.email,
+        role: volunteer.role
+      }
+    });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
-// ✅ Volunteer login
+// Login Volunteer
 exports.loginVolunteer = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const volunteer = await Volunteer.findOne({ email });
-    if (!volunteer) return res.status(404).json({ message: "Volunteer not found" });
+    
+    if (!volunteer) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
 
-    const isMatch = await bcrypt.compare(password, volunteer.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    const isValidPassword = await bcrypt.compare(password, volunteer.password);
+    if (!isValidPassword) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
 
     const token = jwt.sign(
-      { id: volunteer._id, role: volunteer.role },
+      { id: volunteer._id, role: 'volunteer' },  // Explicitly set role in token
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: '24h' }
     );
 
-    res.json({ token, volunteer });
+    res.json({ 
+      token, 
+      volunteer: {
+        id: volunteer._id,
+        name: volunteer.name,
+        email: volunteer.email,
+        role: 'volunteer'
+      }
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
-// ✅ Volunteer updates their own profile
-exports.updateSelf = async (req, res) => {
+// Update food post availability
+exports.updateFoodPostStatus = async (req, res) => {
   try {
-    if (req.user.role !== "volunteer") {
-      return res.status(403).json({ message: "Only volunteers can update their own profile" });
+    const { postId } = req.params;
+    const { status } = req.body;
+
+    const foodPost = await FoodPost.findById(postId);
+    if (!foodPost) {
+      return res.status(404).json({ message: 'Food post not found' });
     }
 
-    const updates = req.body;
-    if (updates.password) {
-      updates.password = await bcrypt.hash(updates.password, 10);
+    // Validate the status value
+    if (!['available', 'unavailable'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status value' });
     }
 
-    const volunteer = await Volunteer.findByIdAndUpdate(req.user.id, updates, { new: true }).select("-password");
-    if (!volunteer) return res.status(404).json({ message: "Volunteer not found" });
+    foodPost.status = status;
+    await foodPost.save();
 
-    res.status(200).json(volunteer);
+    res.json({ 
+      message: 'Food post status updated successfully',
+      foodPost
+    });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
-// ✅ Volunteer deletes their own profile
-exports.deleteSelf = async (req, res) => {
+// List all food posts
+exports.listFoodPosts = async (req, res) => {
   try {
-    if (req.user.role !== "volunteer") {
-      return res.status(403).json({ message: "Only volunteers can delete their own profile" });
-    }
-
-    const volunteer = await Volunteer.findByIdAndDelete(req.user.id);
-    if (!volunteer) return res.status(404).json({ message: "Volunteer not found" });
-
-    res.status(200).json({ message: "Volunteer deleted their account" });
+    const foodPosts = await FoodPost.find()
+      .sort({ createdAt: -1 });
+    res.json(foodPosts);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
-// 🔹 Admin/NGO specific routes 🔹
-
-// Create Volunteer - Admin only
-exports.createVolunteer = async (req, res) => {
+// Get Volunteer profile
+exports.getProfile = async (req, res) => {
   try {
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ message: "Access Denied" });
+    const volunteer = await Volunteer.findById(req.user.id).select('-password');
+    if (!volunteer) {
+      return res.status(404).json({ message: 'Volunteer not found' });
     }
-
-    const volunteer = await Volunteer.create(req.body);
-    res.status(201).json(volunteer);
+    res.json(volunteer);
   } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
-// Get all Volunteers - Admin & NGO
-exports.getVolunteers = async (req, res) => {
-  try {
-    if (req.user.role !== 'admin' && req.user.role !== 'ngo') {
-      return res.status(403).json({ message: "Access Denied" });
-    }
-
-    const volunteers = await Volunteer.find().select("-password");
-    res.status(200).json(volunteers);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Get single Volunteer - Admin & NGO
-exports.getVolunteerById = async (req, res) => {
-  try {
-    if (req.user.role !== 'admin' && req.user.role !== 'ngo') {
-      return res.status(403).json({ message: "Access Denied" });
-    }
-
-    const volunteer = await Volunteer.findById(req.params.id).select("-password");
-    if (!volunteer) return res.status(404).json({ message: "Volunteer not found" });
-
-    res.status(200).json(volunteer);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// ✅ Update Volunteer - Admin only
-exports.updateVolunteer = async (req, res) => {
-  try {
-    const volunteer = await Volunteer.findByIdAndUpdate(req.params.id, req.body, { new: true }).select("-password");
-    if (!volunteer) return res.status(404).json({ message: "Volunteer not found" });
-
-    res.status(200).json(volunteer);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
-// ✅ Delete Volunteer - Admin only
-exports.deleteVolunteer = async (req, res) => {
-  try {
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ message: "Access Denied" });
-    }
-
-    const volunteer = await Volunteer.findByIdAndDelete(req.params.id);
-    if (!volunteer) return res.status(404).json({ message: "Volunteer not found" });
-
-    res.status(200).json({ message: "Volunteer deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };

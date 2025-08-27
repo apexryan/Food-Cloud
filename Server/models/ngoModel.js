@@ -15,45 +15,14 @@ const ngoSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true, // 👈 Needed for login
-  },
-  location: {
-    type: String, // 👈 matches controller "location"
-    required: true,
-  },
-  address: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  verified: {
-    type: Boolean,
-    default: false,
+    required: true
   },
   role: {
     type: String,
-    enum: ['NGO'],
-    default: 'NGO',
+    default: 'ngo'
   },
-
-  passwordResetToken: {
-  type: String,
-  default: undefined
-},
-passwordResetExpires: {
-  type: Date,
-  default: undefined
-},
-
-passwordResetToken: {
-  type: String,
-  default: undefined
-},
-passwordResetExpires: {
-  type: Date,
-  default: undefined
-}
+  passwordResetToken: String,
+  passwordResetExpires: Date
 }, { timestamps: true });
 
 module.exports = mongoose.model('NGO', ngoSchema);

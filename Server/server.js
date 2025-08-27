@@ -25,19 +25,16 @@ const ngoRoutes = require("./routes/ngoRoutes");
 const volunteerRoutes = require("./routes/volunteerRoutes");
 // Removed Razorpay routes
 const chatRoutes = require("./routes/chatRoutes");
-const razorpayRoutes = require("./routes/razorpayRoutes");
 
 // Route middleware
 app.use("/api/reports", reportRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/food", foodRoutes); // ✅ YOUR food system handles everything
-app.use("/api/admins", adminRoutes);
-app.use("/api/ngos", ngoRoutes);
-app.use("/api/volunteers", volunteerRoutes);
-// Removed Razorpay route mount
+app.use("/api/food", foodRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/ngo", ngoRoutes);
+app.use("/api/volunteer", volunteerRoutes);
 app.use("/api/chat", chatRoutes);
-app.use("/api/razorpay", razorpayRoutes);
 
 // ❌ REMOVED: Duplicate food route - your foodRoutes already handles admin access
 

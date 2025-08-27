@@ -32,7 +32,6 @@ import {
 } from "@mui/icons-material";
 // Removed RazorpayDonation
 import ChatDialog from "./Chat/ChatDialog";
-import apiService from "../services/apiService";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -75,8 +74,13 @@ const Navigation = () => {
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.async = true;
+    script.crossOrigin = "anonymous";
     script.onload = () => setIsRzpReady(true);
-    script.onerror = () => setIsRzpReady(false);
+    script.onerror = (e) => {
+      console.error("Failed to load Razorpay:", e);
+      alert("Please disable your ad blocker to make payments");
+      setIsRzpReady(false);
+    };
     document.body.appendChild(script);
   }, []);
 
@@ -88,43 +92,20 @@ const Navigation = () => {
         return;
       }
 
-      // Get public key from server and create order using secret on backend
-      const cfg = await apiService.getRazorpayConfig();
-      const keyId = cfg?.config?.key;
-      if (!keyId) {
-        alert("Payment configuration missing on server.");
-        return;
-      }
-
-      const orderRes = await apiService.createRazorpayOrder(
-        amountInPaise,
-        "INR"
-      );
-      if (!orderRes?.success) {
-        alert("Failed to create payment order. Try again.");
-        return;
-      }
-
       const options = {
-        key: keyId,
+        key: "rzp_test_RAUOHQk38rGuRr",  // Your test key
         amount: amountInPaise,
         currency: "INR",
         name: "FoodCloud Connect",
         description: "Support our platform",
         image: "/vite.svg",
-        order_id: orderRes.order?.id,
         handler: function (response) {
-          alert(
-            `Payment successful! Payment ID: ${response.razorpay_payment_id}`
-          );
+          alert("Thank you for your donation!");
           navigate("/dashboard");
         },
         prefill: {
-          name: user?.name || "Subhojit Santra",
-          email: user?.email || "raj@example.com",
-        },
-        notes: {
-          purpose: "Donation/Support",
+          name: user?.name || "",
+          email: user?.email || "",
         },
         theme: {
           color: "#1976d2",

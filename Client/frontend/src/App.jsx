@@ -17,6 +17,8 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import Dashboard from "./components/Dashboard";
+import NGODashboard from "./components/ngo/NGODashboard";
+import VolunteerDashboard from "./components/volunteer/VolunteerDashboard";
 import FoodPosts from "./components/food/FoodPosts";
 import CreateFoodPost from "./components/food/CreateFoodPost";
 import FoodPostDetail from "./components/food/FoodPostDetail";
@@ -70,6 +72,24 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/ngo-dashboard"
+                element={
+                  <ProtectedRoute>
+                    <NGODashboard />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/volunteer-dashboard"
+                element={
+                  <ProtectedRoute>
+                    <VolunteerDashboard />
                   </ProtectedRoute>
                 }
               />

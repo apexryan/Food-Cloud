@@ -131,15 +131,7 @@ const FoodPosts = () => {
   };
 
   const getStatusColor = (status) => {
-    const colors = {
-      available: "success",
-      unavailable: "error",
-      accepted: "warning",
-      picked_up: "info",
-      delivered: "success",
-      canceled: "error",
-    };
-    return colors[status] || "default";
+    return status === "available" ? "success" : "error";
   };
 
   if (loading && foodPosts.length === 0) {

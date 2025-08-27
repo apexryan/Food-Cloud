@@ -95,15 +95,7 @@ const FoodPostDetail = () => {
   };
 
   const getStatusColor = (status) => {
-    const colors = {
-      available: "success",
-      unavailable: "error",
-      accepted: "warning",
-      picked_up: "info",
-      delivered: "success",
-      canceled: "error",
-    };
-    return colors[status] || "default";
+    return status === "available" ? "success" : "error";
   };
 
   if (loading) {
@@ -411,6 +403,33 @@ const FoodPostDetail = () => {
               {/* Action Buttons */}
               <Divider sx={{ my: 3 }} />
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {/* NGO and Volunteer Status Actions */}
+                {isAuthenticated && (user?.role === "ngo" || user?.role === "volunteer") && (
+                  <Box sx={{ mb: 2 }}>
+                    <Button
+                      variant="contained"
+                      color={foodPost.status === "available" ? "error" : "success"}
+                      onClick={async () => {
+                        try {
+                          const newStatus = foodPost.status === "available" ? "unavailable" : "available";
+                          if (user.role === "ngo") {
+                            await apiService.updateNGOFoodPostStatus(foodPost._id, newStatus);
+                          } else {
+                            await apiService.updateVolunteerFoodPostStatus(foodPost._id, newStatus);
+                          }
+                          fetchFoodPost(); // Refresh the post data
+                        } catch (error) {
+                          setError("Failed to update status");
+                        }
+                      }}
+                      fullWidth
+                    >
+                      Mark as {foodPost.status === "available" ? "Unavailable" : "Available"}
+                    </Button>
+                  </Box>
+                )}
+
+                {/* Original Edit/Delete Buttons */}
                 {isAuthenticated &&
                   (user?.role === "admin" ||
                     foodPost.donor?._id === user?.id) && (

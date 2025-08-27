@@ -46,44 +46,77 @@ class ApiService {
     try {
       let response;
 
-      if (userType === "admin") {
-        // Use admin-specific login endpoint
-        response = await api.post("/admins/login", {
-          email,
-          password,
-        });
+      switch(userType) {
+        case "admin":
+          response = await api.post("/admin/login", { email, password });
+          if (response.data.token) {
+            const adminUser = {
+              id: response.data.admin?._id,
+              name: response.data.admin?.name || "Admin",
+              email: email,
+              userType: "admin",
+              role: "admin",
+            };
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify(adminUser));
+            return {
+              message: response.data.message,
+              token: response.data.token,
+              user: adminUser,
+            };
+          }
+          break;
 
-        // Transform admin response to match user response format
-        if (response.data.token) {
-          const adminUser = {
-            id: response.data.admin?._id,
-            name: response.data.admin?.name || "Admin",
-            email: email,
-            userType: "admin",
-            role: "admin",
-          };
+        case "ngo":
+          response = await api.post("/ngo/login", { email, password });
+          if (response.data.token) {
+            const ngoUser = {
+              id: response.data.ngo?.id || response.data.ngo?._id,
+              name: response.data.ngo?.name,
+              email: response.data.ngo?.email,
+              userType: "ngo",
+              role: "ngo",
+            };
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify(ngoUser));
+            return {
+              success: true,
+              token: response.data.token,
+              user: ngoUser
+            };
+          }
+          break;
 
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("user", JSON.stringify(adminUser));
+        case "volunteer":
+          response = await api.post("/volunteer/login", { email, password });
+          if (response.data.token) {
+            const volunteerUser = {
+              id: response.data.volunteer?.id || response.data.volunteer?._id,
+              name: response.data.volunteer?.name,
+              email: response.data.volunteer?.email,
+              userType: "volunteer",
+              role: "volunteer",
+            };
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify(volunteerUser));
+            return {
+              success: true,
+              token: response.data.token,
+              user: volunteerUser
+            };
+          }
+          break;
 
-          return {
-            message: response.data.message,
-            token: response.data.token,
-            user: adminUser,
-          };
-        }
-      } else {
-        // Use regular auth login for other user types
-        response = await api.post("/auth/login", {
-          email,
-          password,
-          userType,
-        });
-
-        if (response.data.token) {
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("user", JSON.stringify(response.data.user));
-        }
+        default:
+          response = await api.post("/auth/login", {
+            email,
+            password,
+            userType,
+          });
+          if (response.data.token) {
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+          }
       }
 
       return response.data;
@@ -95,12 +128,59 @@ class ApiService {
   // POST /api/auth/register - for register (users/ngo/volunteer/admin)
   async register(userData) {
     try {
-      const response = await api.post("/auth/register", userData);
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("user", JSON.stringify(response.data.user));
+      let response;
+      const { userType, ...restData } = userData;
+
+      switch(userType) {
+        case "ngo":
+          response = await api.post("/ngo/register", restData);
+          if (response.data.token) {
+            const ngoUser = {
+              id: response.data.ngo?.id || response.data.ngo?._id,
+              name: response.data.ngo?.name,
+              email: response.data.ngo?.email,
+              userType: "ngo",
+              role: "ngo",
+            };
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify(ngoUser));
+            return {
+              success: true,
+              token: response.data.token,
+              user: ngoUser
+            };
+          }
+          break;
+
+        case "volunteer":
+          response = await api.post("/volunteer/register", restData);
+          if (response.data.token) {
+            const volunteerUser = {
+              id: response.data.volunteer?.id || response.data.volunteer?._id,
+              name: response.data.volunteer?.name,
+              email: response.data.volunteer?.email,
+              userType: "volunteer",
+              role: "volunteer",
+            };
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify(volunteerUser));
+            return {
+              success: true,
+              token: response.data.token,
+              user: volunteerUser
+            };
+          }
+          break;
+
+        default:
+          response = await api.post("/auth/register", userData);
+          if (response.data.token) {
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+          }
+          return response.data;
       }
-      return response.data;
+
     } catch (error) {
       throw error.response?.data || error.message;
     }
@@ -205,6 +285,43 @@ class ApiService {
     }
   }
 
+  // NGO and Volunteer specific endpoints
+  async getNGOFoodPosts() {
+    try {
+      const response = await api.get('/ngo/food-posts');
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  }
+
+  async updateNGOFoodPostStatus(postId, status) {
+    try {
+      const response = await api.put(`/ngo/food-posts/${postId}/status`, { status });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  }
+
+  async getVolunteerFoodPosts() {
+    try {
+      const response = await api.get('/volunteer/food-posts');
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  }
+
+  async updateVolunteerFoodPostStatus(postId, status) {
+    try {
+      const response = await api.put(`/volunteer/food-posts/${postId}/status`, { status });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  }
+
   // GET /api/food - to view all food posts same to admin also
   async getAllFoodPosts(filters = {}) {
     try {
@@ -272,27 +389,6 @@ class ApiService {
     return !!localStorage.getItem("token");
   }
 
-  // Removed Razorpay methods
-  async getRazorpayConfig() {
-    try {
-      const response = await api.get("/razorpay/config");
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || error.message;
-    }
-  }
-
-  async createRazorpayOrder(amountInPaise, currency = "INR") {
-    try {
-      const response = await api.post("/razorpay/create-order", {
-        amount: amountInPaise,
-        currency,
-      });
-      return response.data;
-    } catch (error) {
-      throw error.response?.data || error.message;
-    }
-  }
 
   // ==================== CHATBOT ====================
   async sendChatMessage(prompt, sessionId) {
