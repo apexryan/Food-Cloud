@@ -51,7 +51,7 @@ const handleDonation = async () => {
       key: "rzp_test_RAUOHQk38rGuRr", // Your test key
       amount: amount * 100, // amount in paisa
       currency: "INR",
-      name: "FoodCloud Connect",
+      name: "FoodCloud",
       description: "Donation for NGOs",
       handler: function (response) {
         handleClose();

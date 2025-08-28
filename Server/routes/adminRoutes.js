@@ -4,25 +4,25 @@ const adminController = require("../controllers/adminController");
 const adminAuth = require("../middleware/adminAuthMiddleware");
 
 // ===== Public routes =====
-router.post("/register", adminController.createAdmin); // Register new admin
-router.post("/login", adminController.loginAdmin); // Login admin
+router.post("/register", adminController.createAdmin); 
+router.post("/login", adminController.loginAdmin); 
 
 // ===== Protected routes (Admin only) =====
 router.get("/admins", adminAuth, adminController.getAllAdmins);
-router.put("/admins/:id", adminAuth, adminController.updateAdmin); // ✅ Update Admin
+router.put("/admins/:id", adminAuth, adminController.updateAdmin); 
 router.delete("/admins/:id", adminAuth, adminController.deleteAdmin);
-router.put("/change-password", adminAuth, adminController.changeAdminPassword); // ✅ Change Admin Password
+router.put("/change-password", adminAuth, adminController.changeAdminPassword); 
 
 router.get("/ngos", adminAuth, adminController.getAllNGOs);
-router.put("/ngos/:id", adminAuth, adminController.updateNGO); // ✅ Update NGO
+router.put("/ngos/:id", adminAuth, adminController.updateNGO); 
 router.delete("/ngos/:id", adminAuth, adminController.deleteNGO);
 
 router.get("/volunteers", adminAuth, adminController.getAllVolunteers);
-router.put("/volunteers/:id", adminAuth, adminController.updateVolunteer); // ✅ Update Volunteer
+router.put("/volunteers/:id", adminAuth, adminController.updateVolunteer); 
 router.delete("/volunteers/:id", adminAuth, adminController.deleteVolunteer);
 
 router.get("/donors", adminAuth, adminController.getAllDonors);
-router.put("/donors/:id", adminAuth, adminController.updateDonor); // ✅ Update Donor
+router.put("/donors/:id", adminAuth, adminController.updateDonor); 
 router.delete("/donors/:id", adminAuth, adminController.deleteDonor);
 
 // Food assignment

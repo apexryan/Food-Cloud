@@ -69,7 +69,7 @@ const Dashboard = () => {
           </Box>
 
           <Typography variant="body1" paragraph>
-            Welcome to FoodCloud Connect - a platform dedicated to reducing food
+            Welcome to FoodCloud - a platform dedicated to reducing food
             waste and helping those in need.
           </Typography>
         </Paper>

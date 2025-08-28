@@ -36,11 +36,9 @@ app.use("/api/ngo", ngoRoutes);
 app.use("/api/volunteer", volunteerRoutes);
 app.use("/api/chat", chatRoutes);
 
-// ❌ REMOVED: Duplicate food route - your foodRoutes already handles admin access
 
-// MongoDB connection - YOUR database
 mongoose
-  .connect(process.env.MONGODB_URI) // ✅ Change this to YOUR variable name
+  .connect(process.env.MONGODB_URI) 
   .then(() => {
     console.log("✅ MongoDB connected...");
     app.listen(process.env.PORT || 5000, () => {

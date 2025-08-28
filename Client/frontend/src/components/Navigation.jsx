@@ -96,7 +96,7 @@ const Navigation = () => {
         key: "rzp_test_RAUOHQk38rGuRr",  // Your test key
         amount: amountInPaise,
         currency: "INR",
-        name: "FoodCloud Connect",
+        name: "FoodCloud",
         description: "Support our platform",
         image: "/vite.svg",
         handler: function (response) {
@@ -155,7 +155,7 @@ const Navigation = () => {
     <Box>
       <Box sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}>
         <Typography variant="h6" color="primary">
-          FoodCloud Connect
+          FoodCloud
         </Typography>
       </Box>
       <List>
@@ -202,7 +202,7 @@ const Navigation = () => {
             sx={{ flexGrow: 1, cursor: "pointer" }}
             onClick={() => navigate("/")}
           >
-            FoodCloud Connect
+            FoodCloud
           </Typography>
 
           {!isMobile && (

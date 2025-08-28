@@ -19,7 +19,7 @@ const Footer = () => {
       <Container maxWidth="xl" sx={{ py: 6 }}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
-            <Typography variant="h6" sx={{ color: "#9ee37d", mb: 1 }}>
+            <Typography variant="h6" sx={{ color: "#1976d2", mb: 1 }}>
               FoodCloud
             </Typography>
             <Typography variant="body2" sx={{ color: "#cfd8e3" }}>

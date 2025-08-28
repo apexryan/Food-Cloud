@@ -90,7 +90,7 @@ const Home = () => {
               color="inherit"
               gutterBottom
             >
-              FoodCloud Connect
+              FoodCloud
             </Typography>
             <Typography variant="h5" color="inherit" paragraph>
               Connecting food donors with those in need. Together we can reduce

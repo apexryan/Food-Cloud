@@ -22,11 +22,7 @@ const { uploadMultiple, handleUploadError } = require("../middleware/upload"); /
 
 console.log("Setting up basic food routes...");
 
-// ================== PUBLIC ROUTES ==================
 
-// ROUTE 1: Get all food posts
-// URL: GET /api/food
-// Access: Public (anyone can view available food)
 router.get("/", async (req, res) => {
   console.log(" GET /api/food - Fetching food posts");
   console.log("Query parameters:", req.query);
@@ -34,21 +30,14 @@ router.get("/", async (req, res) => {
 });
 console.log("Route registered: GET /api/food (Get all food posts)");
 
-// ROUTE 2: Get specific food post by ID
-// URL: GET /api/food/:id
-// Access: Public (anyone can view a food post)
+
 router.get("/:id", async (req, res) => {
   console.log(`  GET /api/food/${req.params.id} - Fetching single food post`);
   await getFoodById(req, res);
 });
 console.log("Route registered: GET /api/food/:id (Get single food post)");
 
-// ================== AUTHENTICATED ROUTES ==================
 
-// ROUTE 3: Create new food post
-// URL: POST /api/food
-// Access: Authenticated users (donors)
-// Features: Image upload, authentication required
 router.post(
   "/",
   authenticateUser, // Check if user is logged in
@@ -63,9 +52,7 @@ router.post(
 );
 console.log("Route registered: POST /api/food (Create food post)");
 
-// ROUTE 4: Update food post
-// URL: PUT /api/food/:id
-// Access: Owner, NGO, or Admin
+
 router.put(
   "/:id",
   authenticateUser, // Must be logged in
@@ -79,9 +66,7 @@ router.put(
 );
 console.log("Route registered: PUT /api/food/:id (Update food post)");
 
-// ROUTE 5: Delete food post
-// URL: DELETE /api/food/:id
-// Access: Owner or Admin only
+
 router.delete(
   "/:id",
   authenticateUser, // Must be logged in
@@ -93,12 +78,6 @@ router.delete(
 );
 console.log("Route registered: DELETE /api/food/:id (Delete food post)");
 
-// Removed admin mark available/unavailable routes
-
-// ================== ERROR HANDLING ==================
-
-// Catch-all for undefined routes
-// Option 1: matches everything
 router.use((req, res) => {
   console.log(`404 - Route not found: ${req.method} ${req.originalUrl}`);
   res.status(404).json({
