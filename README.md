@@ -64,24 +64,33 @@ A cloud-powered MERN stack web application designed to help NGOs manage and redi
 
 ---
 
-## 📂 Project Structure ( Not updated )
+## 📂 Project Structure
 
 ```bash
-client/                  # React Frontend
-├── public/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   ├── services/
-│   └── App.jsx
-
-server/                  # Node.js Backend
-├── config/
-├── controllers/
-├── middleware/
-├── models/
-├── routes/
-└── server.js
+├── Client/
+│   └── frontend/                   # React Frontend
+│       ├── public/
+│       │   └── vite.svg
+│       └── src/
+│           ├── assets/
+│           ├── components/
+│           │   ├── auth/          # Authentication components
+│           │   ├── Chat/          # Real-time chat feature
+│           │   │   ├── Controls/
+│           │   │   └── Loader/
+│           │   ├── food/          # Food post management
+│           │   ├── ngo/           # NGO specific components
+│           │   └── volunteer/     # Volunteer components
+│           ├── contexts/          # React Context providers
+│           └── services/          # API services
+├── Server/                        # Node.js Backend
+│   ├── config/                   # Configuration files
+│   ├── controllers/              # Request handlers
+│   ├── middleware/               # Custom middleware
+│   ├── models/                   # Database models
+│   ├── routes/                   # API routes
+│   └── services/                 # Business logic
+└── images/                       # Project screenshots
 ```
 
 ## 📦 Prerequisites
